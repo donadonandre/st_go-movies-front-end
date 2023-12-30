@@ -1,8 +1,11 @@
 import {Link, Outlet} from "react-router-dom";
 import {useState} from "react";
+import Alert from "./components/Alert";
 
 function App() {
   const [jwtToken, setJwtToken] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertClassName, setAlertClassName] = useState("d-none"); // bootstrap to do not show de alert
 
   return (
     <div className="container">
@@ -38,8 +41,13 @@ function App() {
         </div>
 
         <div className="col-md-10">
+          <Alert
+            message={alertMessage}
+            className={alertClassName}
+          />
           <Outlet context={{
             jwtToken, setJwtToken,
+            setAlertClassName, setAlertMessage
           }}/>
         </div>
       </div>

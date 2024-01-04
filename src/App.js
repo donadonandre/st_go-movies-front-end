@@ -1,11 +1,13 @@
 import {Link, Outlet, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import Alert from "./components/Alert";
 
 function App() {
   const [jwtToken, setJwtToken] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertClassName, setAlertClassName] = useState("d-none"); // bootstrap to do not show de alert
+
+  const [tickInterval, setTickInterval] = useState();
 
   const navigate = useNavigate();
 
@@ -21,9 +23,36 @@ function App() {
         })
         .finally(() => {
           setJwtToken("")
+          toggleRefresh(false);
         })
     navigate("/login")
   }
+
+  const toggleRefresh = useCallback((status) => {
+    console.log("clicked");
+
+    if (status) {
+      let i = setInterval(() => {
+        const requestOptions = {
+          method: "GET",
+          credentials: "include"
+        }
+
+        fetch(`/refresh`, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              setJwtToken(data.access_token);
+            })
+            .catch(error => {
+              console.log("user is not logged in", error)
+            })
+      }, 600000)
+      setTickInterval(i);
+    } else {
+      setTickInterval(null);
+      clearInterval(tickInterval);
+    }
+  }, [tickInterval]);
 
   useEffect(() => {
     if (jwtToken === "") {
@@ -36,12 +65,15 @@ function App() {
           .then((response) => response.json())
           .then((data) => {
             setJwtToken(data.access_token);
+            toggleRefresh(true)
           })
           .catch(error => {
             console.log("user is not logged in", error)
           })
     }
-  }, [jwtToken]);
+  }, [jwtToken, toggleRefresh]);
+
+
 
   return (
     <div className="container">
@@ -83,7 +115,7 @@ function App() {
           />
           <Outlet context={{
             jwtToken, setJwtToken,
-            setAlertClassName, setAlertMessage
+            setAlertClassName, setAlertMessage, toogleRefresh: toggleRefresh
           }}/>
         </div>
       </div>

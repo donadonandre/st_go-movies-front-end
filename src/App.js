@@ -1,5 +1,5 @@
 import {Link, Outlet, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Alert from "./components/Alert";
 
 function App() {
@@ -13,6 +13,24 @@ function App() {
     setJwtToken("");
     navigate("/login")
   }
+
+  useEffect(() => {
+    if (jwtToken === "") {
+      const requestOptions = {
+        method: "GET",
+        credentials: "include"
+      }
+
+      fetch(`/refresh`, requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            setJwtToken(data.access_token);
+          })
+          .catch(error => {
+            console.log("user is not logged in", error)
+          })
+    }
+  }, [jwtToken]);
 
   return (
     <div className="container">

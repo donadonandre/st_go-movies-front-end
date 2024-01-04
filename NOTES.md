@@ -22,3 +22,9 @@ But of course that's still vulnerable to certain kind of attacks at the moment.
 At the time that I record this lecture, the only safe place to store a jot is as a variable in JavaScript,
 
 and that's exactly what we're doing.
+
+----
+
+But the problem I have, and I'll open my terminal here is I still have this cookie right here that
+
+cookies never getting deleted.

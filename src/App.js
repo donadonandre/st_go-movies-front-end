@@ -41,7 +41,9 @@ function App() {
         fetch(`/refresh`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-              setJwtToken(data.access_token);
+              if (data.access_token) {
+                setJwtToken(data.access_token);
+              }
             })
             .catch(error => {
               console.log("user is not logged in", error)

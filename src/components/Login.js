@@ -6,10 +6,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const {setJwtToken} = useOutletContext();
-    const {setAlertClassName} = useOutletContext();
-    const {setAlertMessage} = useOutletContext();
-    const {toggleRefresh} = useOutletContext();
+    const {setJwtToken, setAlertClassName, setAlertMessage, toggleRefresh} = useOutletContext();
 
     const navigate = useNavigate();
     const handleSubmit = (event) => {
@@ -30,20 +27,22 @@ const Login = () => {
         }
 
         fetch(`/authenticate`, requestOptions)
-            .then((response) => response.json())
+            .then((response) => {console.log(response); return response.json();})
             .then((data) => {
-                if (data.success) {
-                    setJwtToken(data.token);
+                console.log(data);
+                if (data.error) {
+                    setAlertClassName("alert-danger");
+                    setAlertMessage(data.message);
+                } else {
+                    setJwtToken(data.access_token);
                     setAlertClassName("d-none");
                     setAlertMessage("");
                     toggleRefresh(true);
                     navigate("/");
-                } else {
-                    setAlertClassName("alert-danger");
-                    setAlertMessage(data.message);
                 }
             })
             .catch(error=>{
+                console.log(error);
                 setAlertClassName("alert-danger");
                 setAlertMessage(error)
             })

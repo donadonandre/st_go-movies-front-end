@@ -1,39 +1,40 @@
-import {useEffect, useState} from "react";
-import {Link, useNavigate, useOutletContext} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 const ManageCatalogue = () => {
     const [movies, setMovies] = useState([]);
     const { jwtToken } = useOutletContext();
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect( () => {
         if (jwtToken === "") {
-            navigate("/login")
+            navigate("/login");
+            return
         }
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
-        headers.append("Authorization", "Bearer" + jwtToken);
+        headers.append("Authorization", "Bearer " + jwtToken);
 
         const requestOptions = {
             method: "GET",
-            headers: headers
+            headers: headers,
         }
 
         fetch(`/admin/movies`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                setMovies(data)
+                setMovies(data);
             })
             .catch(err => {
                 console.log(err);
             })
+
     }, [jwtToken, navigate]);
 
-    return (
-
+    return(
         <div>
             <h2>Manage Catalogue</h2>
-            <hr/>
+            <hr />
             <table className="table table-striped table-hover">
                 <thead>
                 <tr>
@@ -57,15 +58,7 @@ const ManageCatalogue = () => {
                 </tbody>
             </table>
         </div>
-
     )
-
-    // return (
-    //     <div>
-    //         <h2>Manage Catalogue</h2>
-    //         <hr/>
-    //     </div>
-    // )
 }
 
 export default ManageCatalogue;

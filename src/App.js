@@ -32,10 +32,12 @@ function App() {
     console.log("clicked");
 
     if (status) {
-      let i = setInterval(() => {
+      console.log("turning on ticking");
+      let i  = setInterval(() => {
+
         const requestOptions = {
           method: "GET",
-          credentials: "include"
+          credentials: "include",
         }
 
         fetch(`/refresh`, requestOptions)
@@ -46,15 +48,18 @@ function App() {
               }
             })
             .catch(error => {
-              console.log("user is not logged in", error)
+              console.log("user is not logged in");
             })
-      }, 600000)
+      }, 600000);
       setTickInterval(i);
+      console.log("setting tick interval to", i);
     } else {
+      console.log("turning off ticking");
+      console.log("turning off tickInterval", tickInterval);
       setTickInterval(null);
       clearInterval(tickInterval);
     }
-  }, [tickInterval]);
+  }, [tickInterval])
 
   useEffect(() => {
     if (jwtToken === "") {
@@ -117,7 +122,7 @@ function App() {
           />
           <Outlet context={{
             jwtToken, setJwtToken,
-            setAlertClassName, setAlertMessage, toogleRefresh: toggleRefresh
+            setAlertClassName, setAlertMessage, toggleRefresh
           }}/>
         </div>
       </div>

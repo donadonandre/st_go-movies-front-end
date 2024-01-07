@@ -5,6 +5,8 @@ import Select from "./form/Select";
 import TextArea from "./form/TextArea";
 import Checkbox from "./form/Checkbox";
 import Swal from "sweetalert2";
+import movie from "./Movie";
+import * as data from "react-dom/test-utils";
 
 const EditMovie = () => {
     const navigate = useNavigate();
@@ -238,6 +240,41 @@ const EditMovie = () => {
         })
     }
 
+    const confirmDelete = () => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this movie!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                headers.append("Authorization", "Bearer " + jwtToken);
+
+                const requestOptions = {
+                    method: "DELETE",
+                    headers: headers,
+                }
+
+                fetch(`/admin/movies/${movie.id}`, requestOptions)
+                    .then((response) => response.json())
+                    .then((dataDelete) => {
+                        if (dataDelete.error) {
+                            console.log(dataDelete.error);
+                        } else {
+                            navigate("/manage-catalogue");
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        })
+    }
+
     if (error != null) {
         return <div>Error: {error.message}</div>
     } else {
@@ -331,6 +368,10 @@ const EditMovie = () => {
 
                 <button className="btn btn-primary">Save</button>
 
+
+                {movie.id > 0 &&
+                    <a href="#!" className="btn btn-danger ms-2" onClick={confirmDelete}>Delete Movie</a>
+                }
 
             </form>
         </div>

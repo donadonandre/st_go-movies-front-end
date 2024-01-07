@@ -31,3 +31,12 @@ cookies never getting deleted.
 
 -----
 The {...movie} part is the spread operator, it creates a new object and copies all properties from movie into that new object. This is necessary because in React you should never mutate the state directly, you should always return a new state object.
+
+## Alerts
+
+* Inside validations commits,
+* Use website: sweetalert2.github.io
+
+``
+npm install sweetalert2
+``

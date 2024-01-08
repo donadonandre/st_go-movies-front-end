@@ -40,3 +40,15 @@ The {...movie} part is the spread operator, it creates a new object and copies a
 ``
 npm install sweetalert2
 ``
+
+## Production
+
+* We need to remove the line: proxy in package.json
+* Change all fetchs to ${process.env.REACT_APP_BACKEND}
+* Put the address in .env.
+* After that, run:
+
+``
+npm run build
+``
+build folder will be created

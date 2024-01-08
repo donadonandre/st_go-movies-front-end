@@ -26,7 +26,7 @@ const Login = () => {
             body: JSON.stringify(payload)
         }
 
-        fetch(`/authenticate`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/authenticate`, requestOptions)
             .then((response) => {console.log(response); return response.json();})
             .then((data) => {
                 console.log(data);
